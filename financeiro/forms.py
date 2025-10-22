@@ -12,7 +12,7 @@ class PurchaseForm(forms.ModelForm):
             "payment_type": forms.Select(attrs={"class": "form-control"}),
             "card": forms.Select(attrs={"class": "form-control"}),
             "total_amount": forms.NumberInput(attrs={"class": "form-control"}),
-            "installments_count": forms.NumberInput(attrs={"class": "form-control", "set_value": "0", "min": "1", "max": "24"}),
+            "installments_count": forms.NumberInput(attrs={"class": "form-control", "min": "1", "max": "24"}),
         }
 
 class IncomeForm(forms.ModelForm):
@@ -31,8 +31,8 @@ class CardForm(forms.ModelForm):
         fields = ['name', 'closing_day', 'due_day']
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
-            "closing_day": forms.NumberInput(attrs={"class": "form-control", "min": "1", "max": "28"}),
-            "due_day": forms.NumberInput(attrs={"class": "form-control", "min": "1", "max": "28"}),
+            "closing_day": forms.NumberInput(attrs={"class": "form-control", "min": "1", "max": "31"}),
+            "due_day": forms.NumberInput(attrs={"class": "form-control", "min": "1", "max": "31"}),
         }
 
 class CategoryForm(forms.ModelForm):

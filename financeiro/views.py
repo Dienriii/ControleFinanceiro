@@ -12,7 +12,6 @@ from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.views.generic import TemplateView
 from django.db.models import Sum, F
-from .models import Installment, Income, RecurringIncome
 
 
 def _month_range(year=None, month=None):
@@ -22,7 +21,6 @@ def _month_range(year=None, month=None):
     start = date(year, month, 1)
     end = start + relativedelta(months=+1)
     return start, end
-
 
 def _recurring_incomes_for_month(start):
     items = []
@@ -52,7 +50,6 @@ class MonthOverviewView(TemplateView):
         total_fixed = sum(i.amount for i in fixed)
         total_var   = sum(i.amount for i in var)
 
-        # Entradas efetivadas
         qs_inc = Income.objects.filter(date__gte=start, date__lt=end)
         inc_total = qs_inc.aggregate(total=Sum("total_amount"))["total"] or 0
 
@@ -90,23 +87,27 @@ class MonthOverviewView(TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        # Se veio /month/<year>/<month>/ usa esse; senão mês atual
         year = self.kwargs.get("year")
         month = self.kwargs.get("month")
+
         if not year or not month:
             today = timezone.localdate()
             year, month = today.year, today.month
 
         base = date(year, month, 1)
-        months = [base + relativedelta(months=+i) for i in range(4)]  # atual + 3 próximos
+        offset = int(self.request.GET.get("offset", 0))
+        visible_months = 4 
+
+        start_month = base + relativedelta(months=offset)
+        months = [start_month + relativedelta(months=i) for i in range(visible_months)]
 
         blocks = [self._month_block(m) for m in months]
 
         ctx.update({
             "blocks": blocks,
+            "offset": offset,
         })
         return ctx
-
 
 class DashboardView(TemplateView):
     template_name = "dashboard.html"

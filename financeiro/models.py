@@ -11,8 +11,8 @@ class Category(models.Model):
     
 class Card(models.Model):
     name = models.CharField(max_length=60)
-    closing_day = models.PositiveSmallIntegerField(help_text="Dia do fechamento da fatura (1-28)")
-    due_day = models.PositiveSmallIntegerField(help_text="Dia do vencimento da fatura (1-28)")
+    closing_day = models.PositiveSmallIntegerField(help_text="Dia do fechamento da fatura (1-31)")
+    due_day = models.PositiveSmallIntegerField(help_text="Dia do vencimento da fatura (1-31)")
 
     def __str__(self):
         return self.name
@@ -34,7 +34,7 @@ class Purchase(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_fixed = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
-    installments_count =  models.PositiveSmallIntegerField(default=1)
+    installments_count =  models.PositiveSmallIntegerField(default=0)
 
     def __str__(self):
         return f"{self.description} - R${self.total_amount} - {self.date}"
@@ -107,7 +107,6 @@ class Installment(models.Model):
     def __str__(self):
         return f"{self.purchase.description} - R${self.amount} - {self.due_date}"
     
-
 class Income(models.Model):
     date = models.DateField(default=timezone.now)
     description = models.CharField(max_length=150)
