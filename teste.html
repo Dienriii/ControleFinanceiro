@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Novo Gasto{% endblock %}
+{% block content %}
+<h3>Novo Gasto</h3>
+<form method="post" class="card p-3">
+  {% csrf_token %}
+  <div class="row g-3">
+    <div class="col-md-3">
+      {{ form.date.label_tag }} {{ form.date }}
+    </div>
+    <div class="col-md-6">
+      {{ form.description.label_tag }} {{ form.description }}
+    </div>
+    <div class="col-md-3">
+      {{ form.category.label_tag }} {{ form.category }}
+    </div>
+
+    <div class="col-md-3">
+      {{ form.payment_type.label_tag }} {{ form.payment_type }}
+    </div>
+    <div class="col-md-3">
+      {{ form.card.label_tag }} {{ form.card }}
+      <div class="form-text">Obrigatório apenas para crédito.</div>
+    </div>
+    <div class="col-md-3">
+      {{ form.total_amount.label_tag }} {{ form.total_amount }}
+    </div>
+    <div class="col-md-2">
+      {{ form.installments_count.label_tag }} {{ form.installments_count }}
+      <div class="form-text">Use &gt;1 para crédito parcelado.</div>
+    </div>
+    <div class="col-md-1 d-flex align-items-end">
+      <div class="form-check">
+        {{ form.is_fixed }} <label class="form-check-label">Fixo</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-3 d-flex gap-2">
+    <button class="btn btn-primary">Salvar</button>
+    <a href="{% url 'month_overview' %}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

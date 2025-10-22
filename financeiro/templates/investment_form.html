@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}+ Investimento{% endblock %}
+{% block content %}
+<h3>Novo Snapshot de Investimento</h3>
+<form method="post" class="card p-3">
+  {% csrf_token %}
+  <div class="row g-3">
+    <div class="col-md-3">
+      {{ form.date.label_tag }} {{ form.date }}
+    </div>
+    <div class="col-md-5">
+      {{ form.platform.label_tag }} {{ form.platform }}
+      <div class="form-text">Ex.: Nubank, XP, Clear… (opcional)</div>
+    </div>
+    <div class="col-md-4">
+      {{ form.total_amount.label_tag }} {{ form.total_amount }}
+    </div>
+  </div>
+
+  <div class="mt-3 d-flex gap-2">
+    <button class="btn btn-warning">Salvar</button>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

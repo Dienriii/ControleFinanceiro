@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Novo Gasto{% endblock %}
+{% block content %}
+<h3>Novo Gasto</h3>
+<form method="post" class="card p-3">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class="mt-3 d-flex gap-2">
+    <button class="btn btn-primary">Salvar</button>
+    <a href="{% url 'month_overview' %}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<h3>Dashboard</h3>
+
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card border-warning">
+      <div class="card-header bg-warning">Investimentos (último)</div>
+      <div class="card-body">
+        {% if last_inv %}
+          <div><strong>Data:</strong> {{ last_inv.date|date:"d/m/Y" }}</div>
+          <div><strong>Plataforma:</strong> {{ last_inv.platform|default:"—" }}</div>
+          <div class="display-6">R$ {{ last_inv.total_amount }}</div>
+        {% else %}
+          <div class="text-muted">Sem snapshots ainda.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card border-info">
+      <div class="card-header bg-info">Poupança (mês atual)</div>
+      <div class="card-body">
+        {% if savings %}
+          <div class="display-6">R$ {{ savings.saved_amount }}</div>
+        {% else %}
+          <div class="text-muted">Sem valor lançado.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card border-secondary">
+      <div class="card-header">Top categorias (90 dias)</div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          {% for c in top_cats %}
+            <li class="list-group-item d-flex justify-content-between">
+              <span>{{ c.cat }}</span>
+              <strong>R$ {{ c.total }}</strong>
+            </li>
+          {% empty %}
+            <li class="list-group-item text-muted">Sem dados.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

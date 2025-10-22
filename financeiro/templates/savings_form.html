@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}+ Poupança{% endblock %}
+{% block content %}
+<h3>Poupança do Mês</h3>
+<form method="post" class="card p-3">
+  {% csrf_token %}
+  <div class="row g-3">
+    <div class="col-md-4">
+      {{ form.month.label_tag }} {{ form.month }}
+      <div class="form-text">Use o 1º dia do mês (ex.: 2025-10-01).</div>
+    </div>
+    <div class="col-md-4">
+      {{ form.saved_amount.label_tag }} {{ form.saved_amount }}
+    </div>
+  </div>
+
+  <div class="mt-3 d-flex gap-2">
+    <button class="btn btn-warning">Salvar</button>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+{% endblock %}

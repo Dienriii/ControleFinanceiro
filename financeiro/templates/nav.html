@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'month_overview' %}">CONTROLE FINANCEIRO</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="{% url 'month_overview' %}">Visão Mensal</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a></li>
+      </ul>
+      <div class="d-flex gap-2">
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'purchase_create' %}">+ Gasto</a>
+        <a class="btn btn-outline-success btn-sm" href="{% url 'income_create' %}">+ Entrada</a>
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'category_create' %}">+ Categoria</a>
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'card_create' %}">+ Cartão</a>
+        <a class="btn btn-outline-warning btn-sm" href="{% url 'investment_create' %}">+ Invest.</a>
+        <a class="btn btn-outline-warning btn-sm" href="{% url 'savings_create' %}">+ Poupança</a>
+      </div>
+    </div>
+  </div>
+</nav>
+</nav>

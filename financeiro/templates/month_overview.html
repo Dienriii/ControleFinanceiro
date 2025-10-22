@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block title %}Visão Mensal (Geral){% endblock %}
+{% block content %}
+
+<style>
+  .sec-header   { background:#2e7d32; color:#fff; }
+  .sec-income   { background:#1b5e20; color:#fff; }
+  .sec-fixed    { background:#c62828; color:#fff; }
+  .sec-var      { background:#ef6c00; color:#fff; }
+  .sec-saved    { background:#ffd54f; }
+  .sec-balance  { background:#aed581; }
+  .cell         { border:1px solid #e0e0e0; padding:.35rem .5rem; }
+  .title        { font-weight:600; text-transform:uppercase; letter-spacing:.02em; }
+  .mini         { font-size:.85rem; }
+  .strip td     { border-bottom:1px dashed #e0e0e0; }
+  .sticky-top-1 { position: sticky; top: 0; z-index: 1; }
+  .money        { text-align:right; white-space:nowrap; }
+  @media (max-width: 991px){ .grid-month { flex-direction:column; } }
+</style>
+
+<h3>Visão Geral — mês atual + próximos 3</h3>
+<div class="d-flex gap-3 grid-month">
+  {% for b in blocks %}
+  <div class="flex-fill" style="min-width:260px;">
+    <!-- Cabeçalho do mês -->
+    <div class="cell sec-header sticky-top-1 title text-center">
+      {{ b.label|date:"F"|capfirst }} / {{ b.label|date:"Y" }}
+    </div>
+
+    <!-- ENTRADAS -->
+    <div class="cell sec-income title">Entradas</div>
+    <table class="table table-sm mb-2">
+      <thead class="mini">
+        <tr><th>Data</th><th>Desc</th><th class="money">Valor</th></tr>
+      </thead>
+      <tbody>
+        {% for x in b.entries %}
+          <tr class="strip">
+            <td class="mini">{{ x.date|date:"d/m" }}</td>
+            <td class="mini">{{ x.description }}</td>
+            <td class="money text-success">R$ {{ x.amount }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="3" class="text-muted mini">Sem entradas efetivadas.</td></tr>
+        {% endfor %}
+        {% for r in b.recs %}
+          <tr class="strip">
+            <td class="mini">{{ r.date|date:"d/m" }}</td>
+            <td class="mini">{{ r.description }} <span class="badge bg-info text-dark">recorrente</span></td>
+            <td class="money text-success">R$ {{ r.amount }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="2" class="money mini">Total efetivado</th>
+          <th class="money text-success">R$ {{ b.totals.incomes }}</th>
+        </tr>
+        <tr>
+          <th colspan="2" class="money mini">+ Recorrentes</th>
+          <th class="money text-success">R$ {{ b.totals.recs }}</th>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- SAÍDAS FIXAS -->
+    <div class="cell sec-fixed title">Saída: Despesas Fixas</div>
+    <table class="table table-sm mb-2">
+      <thead class="mini"><tr><th>Dia</th><th>Desc</th><th class="money">Parc</th><th class="money">R$</th></tr></thead>
+      <tbody>
+        {% for i in b.fixed %}
+          <tr class="strip">
+            <td class="mini">{{ i.due_date|date:"d" }}</td>
+            <td class="mini">{{ i.purchase.description }}</td>
+            <td class="mini money">#{{ i.number }}/{{ i.purchase.installments_count }}</td>
+            <td class="money text-danger">R$ {{ i.amount }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="text-muted mini">Sem fixas este mês.</td></tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr><th colspan="3" class="money mini">Total</th>
+            <th class="money text-danger">R$ {{ b.totals.fixed }}</th></tr>
+      </tfoot>
+    </table>
+
+    <!-- SAÍDAS VARIÁVEIS -->
+    <div class="cell sec-var title">Saída: Despesas Variáveis</div>
+    <table class="table table-sm mb-2">
+      <thead class="mini"><tr><th>Dia</th><th>Desc</th><th class="money">Parc</th><th class="money">R$</th></tr></thead>
+      <tbody>
+        {% for i in b.var %}
+          <tr class="strip">
+            <td class="mini">{{ i.due_date|date:"d" }}</td>
+            <td class="mini">{{ i.purchase.description }}</td>
+            <td class="mini money">#{{ i.number }}/{{ i.purchase.installments_count }}</td>
+            <td class="money text-danger">R$ {{ i.amount }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="text-muted mini">Sem variáveis este mês.</td></tr>
+        {% endfor %}
+      </tbody>
+      <tfoot>
+        <tr><th colspan="3" class="money mini">Total</th>
+            <th class="money text-danger">R$ {{ b.totals.var }}</th></tr>
+      </tfoot>
+    </table>
+
+    <!-- GUARDADO E BALANÇO -->
+    <div class="cell sec-saved title">Guardado no mês</div>
+    <div class="cell money">R$ {{ b.totals.saved }}</div>
+
+    <div class="cell sec-balance title mt-2">Balanço</div>
+    <table class="table table-sm">
+      <tbody>
+        <tr><td class="mini">Entradas (efetivadas)</td>
+            <td class="money">R$ {{ b.totals.incomes }}</td></tr>
+        <tr><td class="mini">+ Recorrentes</td>
+            <td class="money">R$ {{ b.totals.recs }}</td></tr>
+        <tr><td class="mini">− Saídas (fixas + variáveis)</td>
+            <td class="money">R$ {{ b.totals.out }}</td></tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th class="mini">Saldo projetado</th>
+          <th class="money {% if b.totals.balance >= 0 %}text-success{% else %}text-danger{% endif %}">
+            R$ {{ b.totals.balance }}
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

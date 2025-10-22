@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}+ Cartão{% endblock %}
+{% block content %}
+<h3>Novo Cartão</h3>
+<form method="post" class="card p-3">
+  {% csrf_token %}
+  <div class="row g-3">
+    <div class="col-md-6">{{ form.name.label_tag }} {{ form.name }}</div>
+    <div class="col-md-3">{{ form.closing_day.label_tag }} {{ form.closing_day }}</div>
+    <div class="col-md-3">{{ form.due_day.label_tag }} {{ form.due_day }}</div>
+  </div>
+  <div class="mt-3 d-flex gap-2">
+    <button class="btn btn-primary">Salvar</button>
+    <a href="{% url 'month_overview' %}" class="btn btn-secondary">Cancelar</a>
+  </div>
+</form>
+{% endblock %}
